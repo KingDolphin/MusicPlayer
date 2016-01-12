@@ -16,6 +16,7 @@ public class MainActivity extends ActionBarActivity {
         actionBar.hide();
 
         setContentView(R.layout.activity_main);
+        //TODO: Start song list fragment
     }
 
 }
