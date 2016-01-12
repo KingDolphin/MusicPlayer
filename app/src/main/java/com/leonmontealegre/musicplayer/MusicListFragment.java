@@ -1,7 +1,9 @@
 package com.leonmontealegre.musicplayer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +34,14 @@ public abstract class MusicListFragment extends ListFragment {
     protected abstract ArrayAdapter getArrayAdapter();
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        Object o = ((ArrayAdapter)getListAdapter()).getItem(position);
-        Log.d(TAG, f.toString() + " was clicked." + FamilyMemberActivity.class);
-        Intent i = new Intent(getActivity(), FamilyMemberActivity.class);
-        i.putExtra(FamilyMember.EXTRA_RELATION, f.getRelation());
-        i.putExtra(FamilyMember.EXTRA_INDEX, position);
-        startActivity(i);
+    public final void onListItemClick(ListView l, View v, int position, long id) {
+          /* TODO : Switch to player with song */
+//        Object o = ((ArrayAdapter)getListAdapter()).getItem(position);
+//        Log.d(TAG, o.toString() + " was clicked.");
+//        Intent i = new Intent(getActivity(), FamilyMemberActivity.class);
+//        i.putExtra(FamilyMember.EXTRA_RELATION, f.getRelation());
+//        i.putExtra(FamilyMember.EXTRA_INDEX, position);
+//        startActivity(i);
     }
 
 }
