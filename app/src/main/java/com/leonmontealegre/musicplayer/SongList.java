@@ -8,7 +8,9 @@ public final class SongList {
 
     private ArrayList<Song> songs;
 
-    private SongList() {}
+    private SongList() {
+        songs = new ArrayList<Song>();
+    }
 
     public static void add(Song song) {
         if (instance == null)
@@ -16,9 +18,9 @@ public final class SongList {
         instance.songs.add(song);
     }
 
-    public void play(int index) {
-        if (songs != null && index >= 0 && index < songs.size())
-            songs.get(index).play();
+    public static void play(int index) {
+        if (instance.songs != null && index >= 0 && index < instance.songs.size())
+            instance.songs.get(index).play();
     }
 
 }

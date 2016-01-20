@@ -37,14 +37,13 @@ public class MainActivity extends ActionBarActivity {
                                        MediaStore.Audio.Media.ALBUM_ID,
                                        MediaStore.Audio.Media.DURATION };
         final String where = MediaStore.Audio.Media.IS_MUSIC + "=1";
-        final Cursor cursor = context.getContentResolver().query(uri,
-                cursor_cols, where, null, null);
+        final Cursor cursor = context.getContentResolver().query(uri, cursor_cols, where, null, null);
 
         while (cursor.moveToNext()) {
             String artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
             String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
             String title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
-            String data = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+            String dataPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)); //is a path
             long albumId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
 
             int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
@@ -52,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
             Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
 
-            Log.d(TAG, albumArtUri.toString());
+            Log.d(TAG, "ALBUM ART : " + albumArtUri.toString());
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), albumArtUri);
@@ -61,8 +60,11 @@ public class MainActivity extends ActionBarActivity {
                 e.printStackTrace();
             }
 
-            SongList.add(new Song(artist, bitmap, album, title, data, albumId, duration, albumArtUri));
+            SongList.add(new Song(artist, bitmap, album, title, dataPath, albumId, duration, albumArtUri));
+            Log.d(TAG, "SONG : " + title + " : " + duration);
         }
+
+        SongList.play(0);
 
         //TODO: Start song list fragment
     }

@@ -6,17 +6,17 @@ import android.provider.MediaStore;
 
 public class Song {
 
-    private String artist, album, title, data;
+    private String artist, album, title, dataPath;
     private Bitmap bitmap;
     private long albumId;
     private int duration;
     private Uri albumArtUri;
 
-    public Song(String artist, Bitmap bitmap, String album, String title, String data, long albumId, int duration, Uri albumArtUri) {
+    public Song(String artist, Bitmap bitmap, String album, String title, String dataPath, long albumId, int duration, Uri albumArtUri) {
         this.artist = artist;
         this.album = album;
         this.title = title;
-        this.data = data;
+        this.dataPath = dataPath;
         this.bitmap = bitmap;
         this.albumId = albumId;
         this.duration = duration;
@@ -39,16 +39,15 @@ public class Song {
         return this.artist;
     }
 
-    public MediaStore.Audio getAudio() {
-        return null;
+    public int getDuration() {
+        return this.duration;
     }
 
-    public int getDuration() {
-        return 0;
-    }
+    public String getDataPath() { return this.dataPath; }
 
     public void play() {
-
+        MusicService.instance.setSong(this);
+        //MusicService.instance.startMusic();
     }
 
 }
