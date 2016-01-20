@@ -23,4 +23,8 @@ public final class SongList {
             instance.songs.get(index).play();
     }
 
+    public static ArrayList<Song> getSongs() {
+        return instance.songs;
+    }
+
 }
