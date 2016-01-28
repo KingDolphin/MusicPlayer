@@ -45,11 +45,9 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         if (mPlayer != null && mPlayer.isPlaying())
             stopMusic();
 
-        mPlayer = new MediaPlayer();//MediaPlayer.create(this, Uri.parse(song.getDataPath()));
-
+        mPlayer = new MediaPlayer();
 
         try {
-            //mPlayer.release();
             mPlayer.setDataSource(song.getDataPath());
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
@@ -64,28 +62,28 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
                     return true;
                 }
             });
-            mPlayer.prepare();
-            mPlayer.start();
+            startMusic();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void startMusic() {
-        if(mPlayer != null && !mPlayer.isPlaying()) {
-
+    public void startMusic() throws IOException {
+        if (mPlayer != null && !mPlayer.isPlaying()) {
+            mPlayer.prepare();
+            mPlayer.start();
         }
     }
 
     public void pauseMusic() {
-        if(mPlayer != null && mPlayer.isPlaying()) {
+        if (mPlayer != null && mPlayer.isPlaying()) {
             mPlayer.pause();
             length = mPlayer.getCurrentPosition();
         }
     }
 
     public void resumeMusic() {
-        if(mPlayer != null && !mPlayer.isPlaying()) {
+        if (mPlayer != null && !mPlayer.isPlaying()) {
             mPlayer.seekTo(length);
             mPlayer.start();
         }
@@ -102,7 +100,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     @Override
     public void onDestroy () {
         super.onDestroy();
-        if(mPlayer != null) {
+        if (mPlayer != null) {
             try {
                 mPlayer.stop();
                 mPlayer.release();
@@ -114,7 +112,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     public boolean onError(MediaPlayer mp, int what, int extra) {
         Toast.makeText(this, "Music player failed!", Toast.LENGTH_SHORT).show();
-        if(mPlayer != null) {
+        if (mPlayer != null) {
             try {
                 mPlayer.stop();
                 mPlayer.release();

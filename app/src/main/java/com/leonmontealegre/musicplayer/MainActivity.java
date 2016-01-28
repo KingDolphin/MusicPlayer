@@ -10,7 +10,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.io.File;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -40,10 +47,13 @@ public class MainActivity extends ActionBarActivity {
         final Cursor cursor = context.getContentResolver().query(uri, cursor_cols, where, null, null);
 
         while (cursor.moveToNext()) {
+            String dataPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)); //is a path
+            if (!new File(dataPath).exists())
+                continue;
+
             String artist = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
             String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
             String title = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
-            String dataPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)); //is a path
             long albumId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
 
             int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
@@ -51,22 +61,25 @@ public class MainActivity extends ActionBarActivity {
             Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
 
-            Log.d(TAG, "ALBUM ART : " + albumArtUri.toString());
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), albumArtUri);
                 bitmap = Bitmap.createScaledBitmap(bitmap, 30, 30, true);
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.d(TAG, "Song does not have album art.");
             }
 
             SongList.add(new Song(artist, bitmap, album, title, dataPath, albumId, duration, albumArtUri));
             Log.d(TAG, "SONG : " + title + " : " + duration);
         }
 
-        SongList.play(0);
+        //SongList.play(0);
+
 
         //TODO: Start song list fragment
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new SongListFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentControlBar, new ControlBarFragment()).commit();
+        //rootView.findViewById(R.id.GLsurfaceView);
     }
 
 }

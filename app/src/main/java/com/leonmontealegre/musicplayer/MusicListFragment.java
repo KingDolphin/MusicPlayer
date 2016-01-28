@@ -16,16 +16,17 @@ public abstract class MusicListFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = super.onCreateView(inflater, parent, savedInstanceState);
+        View rootView = super.onCreateView(inflater, parent, savedInstanceState);
 
         getActivity().setTitle(R.string.app_title);
         ArrayAdapter adapter = getArrayAdapter();
         setListAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        ListView listView = (ListView)v.findViewById(android.R.id.list);
+        ListView listView = (ListView)rootView.findViewById(android.R.id.list);
         registerForContextMenu(listView);
-        return v;
+
+        return rootView;
     }
 
     protected abstract ArrayAdapter getArrayAdapter();

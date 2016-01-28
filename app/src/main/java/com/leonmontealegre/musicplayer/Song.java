@@ -47,7 +47,6 @@ public class Song {
 
     public void play() {
         MusicService.instance.setSong(this);
-        //MusicService.instance.startMusic();
     }
 
 }
