@@ -2,17 +2,18 @@ package com.leonmontealegre.musicplayer;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public abstract class MusicListFragment extends ListFragment {
 
     private static final String TAG = "MusicListFragment";
-
-    protected SongList songs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -33,15 +34,6 @@ public abstract class MusicListFragment extends ListFragment {
 
     protected abstract void onSearch(String keyword);
 
-    @Override
-    public final void onListItemClick(ListView l, View v, int position, long id) {
-          /* TODO : Switch to player with song */
-//        Object o = ((ArrayAdapter)getListAdapter()).getItem(position);
-//        Log.d(TAG, o.toString() + " was clicked.");
-//        Intent i = new Intent(getActivity(), FamilyMemberActivity.class);
-//        i.putExtra(FamilyMember.EXTRA_RELATION, f.getRelation());
-//        i.putExtra(FamilyMember.EXTRA_INDEX, position);
-//        startActivity(i);
-    }
+    public abstract void onSongFinish(Song s);
 
 }

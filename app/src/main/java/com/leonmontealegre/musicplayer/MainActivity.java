@@ -16,12 +16,18 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.File;
 
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
+
+    public static ControlBarFragment controlBar;
+
+    public static MusicListFragment musicListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +78,15 @@ public class MainActivity extends ActionBarActivity {
             SongList.add(new Song(artist, bitmap, album, title, dataPath, albumId, duration, albumArtUri));
             Log.d(TAG, "SONG : " + title + " : " + duration);
         }
+        SongList.sort();
 
-        //SongList.play(0);
 
+        controlBar = new ControlBarFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentControlBar, controlBar).commit();
 
-        //TODO: Start song list fragment
-        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new SongListFragment()).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragmentControlBar, new ControlBarFragment()).commit();
-        //rootView.findViewById(R.id.GLsurfaceView);
+        musicListFragment = new SongListFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, musicListFragment).commit();
+
     }
 
 }

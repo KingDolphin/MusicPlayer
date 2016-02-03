@@ -1,10 +1,12 @@
 package com.leonmontealegre.musicplayer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public final class SongList {
 
-    private static SongList instance;
+    private static SongList instance = new SongList();
 
     private ArrayList<Song> songs;
 
@@ -13,14 +15,23 @@ public final class SongList {
     }
 
     public static void add(Song song) {
-        if (instance == null)
-            instance = new SongList();
         instance.songs.add(song);
     }
 
     public static void play(int index) {
-        if (instance.songs != null && index >= 0 && index < instance.songs.size())
+        if (index >= 0 && index < instance.songs.size())
             instance.songs.get(index).play();
+    }
+
+    public static void sort() {
+        Collections.sort(instance.songs, new Comparator<Song>() {
+            @Override
+            public int compare(Song s1, Song s2) {
+                return s1.getTitle().compareToIgnoreCase(s2.getTitle());
+            }
+        });
+        for (int i = 0; i < instance.songs.size(); i++)
+            instance.songs.get(i).index = i;
     }
 
     public static ArrayList<Song> getSongs() {

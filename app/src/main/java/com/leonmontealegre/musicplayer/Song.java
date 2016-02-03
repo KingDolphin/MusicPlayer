@@ -6,13 +6,17 @@ import android.provider.MediaStore;
 
 public class Song {
 
+    private static int COUNT = 0;
+
     private String artist, album, title, dataPath;
     private Bitmap bitmap;
     private long albumId;
     private int duration;
     private Uri albumArtUri;
+    public int index;
 
     public Song(String artist, Bitmap bitmap, String album, String title, String dataPath, long albumId, int duration, Uri albumArtUri) {
+        this.index = COUNT++;
         this.artist = artist;
         this.album = album;
         this.title = title;
