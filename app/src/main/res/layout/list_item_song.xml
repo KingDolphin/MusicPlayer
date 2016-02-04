@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/song_list_item_button"
-    android:textSize="30sp"
-    android:singleLine="true">
+    android:singleLine="true"
+    android:marqueeRepeatLimit="marquee_forever"
+    android:scrollHorizontally="true"
+    style="?android:attr/borderlessButtonStyle">
 </Button>

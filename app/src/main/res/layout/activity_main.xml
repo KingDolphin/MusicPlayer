@@ -7,23 +7,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/fragmentControlBar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:background="#888" />
+        <ImageView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/backgroundImage"
+            android:scaleType="center"
+            android:src="@drawable/background1"
+            />
 
         <FrameLayout
-            android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/fragmentControlBar" />
+            android:id="@+id/fragmentContainer"
+            android:layout_above="@+id/fragmentControlBar" >
+        </FrameLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:id="@+id/fragmentControlBar"
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" >
+        </FrameLayout>
 
-     </RelativeLayout>
+    </RelativeLayout>
 
 
 

@@ -93,9 +93,14 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     }
 
     public int getCurrentPosition() {
-        if (mPlayer.isPlaying())
+        if (mPlayer != null && mPlayer.isPlaying())
             return mPlayer.getCurrentPosition();
         return 0;
+    }
+
+    public void setCurrentPosition(int position) {
+        if (mPlayer != null && mPlayer.isPlaying())
+            mPlayer.seekTo(position);
     }
 
     public void startMusic() throws IOException {
@@ -136,7 +141,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
             mPlayer = null;
             isPlaying = false;
             isStopped = true;
-            MainActivity.controlBar.onSongPause();
+            MainActivity.controlBar.onSongStop();
         }
     }
 

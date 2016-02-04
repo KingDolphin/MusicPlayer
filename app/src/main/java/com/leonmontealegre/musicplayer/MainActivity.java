@@ -86,7 +86,6 @@ public class MainActivity extends ActionBarActivity {
 
         musicListFragment = new SongListFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, musicListFragment).commit();
-
     }
 
 }
