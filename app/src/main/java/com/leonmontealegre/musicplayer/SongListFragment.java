@@ -30,15 +30,6 @@ public class SongListFragment extends MusicListFragment {
 
     public static final String TAG = "SongListFragment";
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View rootView = super.onCreateView(inflater, parent, savedInstanceState);
-
-        final ImageView backgroundImage = (ImageView)parent.getRootView().findViewById(R.id.backgroundImage);
-        animate(backgroundImage);
-
-        return rootView;
-    }
-
     @Override
     protected ArrayAdapter getArrayAdapter() {
         return new SongAdapter(SongList.getSongs());

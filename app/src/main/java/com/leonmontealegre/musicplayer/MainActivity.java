@@ -1,20 +1,29 @@
 package com.leonmontealegre.musicplayer;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -29,6 +38,11 @@ public class MainActivity extends ActionBarActivity {
 
     public static TabbedFragment tabbedFragment;
 
+    protected float angle = -(float)Math.PI / 24;
+
+    protected Matrix matrix = new Matrix();
+    protected float value = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -38,6 +52,9 @@ public class MainActivity extends ActionBarActivity {
         actionBar.hide();
 
         setContentView(R.layout.activity_main);
+
+        final ImageView backgroundImage = (ImageView)findViewById(R.id.backgroundImage);
+        animate(backgroundImage);
 
         Context context = getApplicationContext();
 
@@ -87,6 +104,42 @@ public class MainActivity extends ActionBarActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, tabbedFragment).commit();
 
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentSearchBar, new SearchBarFragment()).commit();
+    }
+
+    protected void animate(final ImageView backgroundImage) {
+        backgroundImage.setScaleType(ImageView.ScaleType.MATRIX);
+
+        final float scaleFactor = (float) backgroundImage.getHeight() / (float) backgroundImage.getDrawable().getIntrinsicHeight() * 1.25f;
+        matrix.postScale(scaleFactor, scaleFactor);
+        matrix.postTranslate(-value * (float)Math.cos(angle), value * (float)Math.sin(angle));
+        backgroundImage.setImageMatrix(matrix);
+
+        ValueAnimator animator;
+        if (value == 0)
+            animator = ValueAnimator.ofFloat(0, 100);
+        else
+            animator = ValueAnimator.ofFloat(value, 0);
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                value = (float)animation.getAnimatedValue();
+                matrix.reset();
+                matrix.postScale(scaleFactor, scaleFactor);
+                matrix.postTranslate(-value * (float)Math.cos(angle), value * (float)Math.sin(angle));
+                backgroundImage.setImageMatrix(matrix);
+            }
+        });
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animate(backgroundImage);
+            }
+        });
+        animator.setDuration(value == -1 ? 10 : 50000);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setStartDelay(0);
+        animator.start();
     }
 
 }
