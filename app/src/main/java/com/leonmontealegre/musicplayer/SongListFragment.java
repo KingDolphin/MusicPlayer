@@ -21,7 +21,10 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class SongListFragment extends MusicListFragment {
 
@@ -43,7 +46,18 @@ public class SongListFragment extends MusicListFragment {
 
     @Override
     protected void onSearch(String keyword) {
-
+        List<Song> music = new ArrayList<>(SongList.getSongs());
+        Set<Song> results = new TreeSet<>();
+        for(Song z : music) {
+            String name = z.getTitle();
+            if (name.contains(keyword)) {
+                results.add(z);
+            }
+        }
+        ArrayAdapter<Song> music2 = getArrayAdapter();
+        music2.clear();
+        music2.addAll(results);
+        music2.notifyDataSetChanged();
     }
 
     @Override
