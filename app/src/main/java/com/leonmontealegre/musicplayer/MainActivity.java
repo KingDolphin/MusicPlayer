@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity {
 
     public static ControlBarFragment controlBar;
 
-    public static MusicListFragment musicListFragment;
+    public static TabbedFragment tabbedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +80,11 @@ public class MainActivity extends ActionBarActivity {
         }
         SongList.sort();
 
-
         controlBar = new ControlBarFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentControlBar, controlBar).commit();
 
-        musicListFragment = new SongListFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, musicListFragment).commit();
+        tabbedFragment = new TabbedFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, tabbedFragment).commit();
     }
 
 }
