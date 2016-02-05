@@ -6,11 +6,12 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/editText"
+        android:id="@+id/search_bar"
         android:layout_gravity="center_horizontal"
         android:editable="true"
         android:enabled="true"
         android:singleLine="true"
         android:textIsSelectable="true" />
+
 
 </RelativeLayout>
