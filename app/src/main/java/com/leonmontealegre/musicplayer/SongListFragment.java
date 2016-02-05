@@ -27,11 +27,6 @@ public class SongListFragment extends MusicListFragment {
 
     public static final String TAG = "SongListFragment";
 
-    private float angle = -(float)Math.PI / 24;
-
-    private Matrix matrix = new Matrix();
-    private float value = -1;
-
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, parent, savedInstanceState);
 
@@ -84,42 +79,6 @@ public class SongListFragment extends MusicListFragment {
             });
             return convertView;
         }
-    }
-
-    private void animate(final ImageView backgroundImage) {
-        backgroundImage.setScaleType(ImageView.ScaleType.MATRIX);
-
-        final float scaleFactor = (float) backgroundImage.getHeight() / (float) backgroundImage.getDrawable().getIntrinsicHeight() * 1.25f;
-        matrix.postScale(scaleFactor, scaleFactor);
-        matrix.postTranslate(-value * (float)Math.cos(angle), value * (float)Math.sin(angle));
-        backgroundImage.setImageMatrix(matrix);
-
-        ValueAnimator animator;
-        if (value == 0)
-            animator = ValueAnimator.ofFloat(0, 100);
-        else
-            animator = ValueAnimator.ofFloat(value, 0);
-
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                value = (float)animation.getAnimatedValue();
-                matrix.reset();
-                matrix.postScale(scaleFactor, scaleFactor);
-                matrix.postTranslate(-value * (float)Math.cos(angle), value * (float)Math.sin(angle));
-                backgroundImage.setImageMatrix(matrix);
-            }
-        });
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animate(backgroundImage);
-            }
-        });
-        animator.setDuration(value == -1 ? 10 : 50000);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.setStartDelay(0);
-        animator.start();
     }
 
 }
