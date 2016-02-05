@@ -67,6 +67,31 @@ public class ControlBarFragment extends Fragment {
             }
         });
 
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (MusicService.instance.isPlaying) {
+                            int milliseconds = MusicService.instance.getCurrentPosition();
+                            if (milliseconds > 0) {
+                                int seconds = (milliseconds / (1000)) % 60;
+                                int minutes = (milliseconds / (1000 * 60)) % 60;
+                                int hours = (milliseconds / (1000 * 60 * 60)) % 24;
+                                currentTimeTextView.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+                                durationBar.setProgress(milliseconds);
+                            }
+                        } else {
+                            durationBar.setProgress(0);
+                            currentTimeTextView.setText(String.format("%02d:%02d:%02d", 0, 0, 0));
+                        }
+                    }
+                });
+            }
+        }, 0, 1000);
+
         return rootView;
     }
 
@@ -82,25 +107,6 @@ public class ControlBarFragment extends Fragment {
         int hours   = (milliseconds / (1000*60*60)) % 24;
         totalTimeTextView.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
         durationBar.setMax(milliseconds);
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        int milliseconds = MusicService.instance.getCurrentPosition();
-                        if (milliseconds > 0) {
-                            int seconds = (milliseconds / (1000)) % 60;
-                            int minutes = (milliseconds / (1000 * 60)) % 60;
-                            int hours = (milliseconds / (1000 * 60 * 60)) % 24;
-                            currentTimeTextView.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
-                            durationBar.setProgress(milliseconds);
-                        }
-                    }
-                });
-            }
-        }, 0, 1000);
     }
 
     public void onSongPause() {

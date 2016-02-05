@@ -74,10 +74,10 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    if (MainActivity.musicListFragment != null) {
+                    if (MainActivity.tabbedFragment.currentFragment != null) {
                         isPlaying = false;
                         stopMusic();
-                        MainActivity.musicListFragment.onSongFinish(currentSong);
+                        MainActivity.tabbedFragment.currentFragment.onSongFinish(currentSong);
                     }
                 }
             });

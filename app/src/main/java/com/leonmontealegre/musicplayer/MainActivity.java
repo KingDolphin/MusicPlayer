@@ -85,6 +85,8 @@ public class MainActivity extends ActionBarActivity {
 
         tabbedFragment = new TabbedFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, tabbedFragment).commit();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentSearchBar, new SearchBarFragment()).commit();
     }
 
 }
