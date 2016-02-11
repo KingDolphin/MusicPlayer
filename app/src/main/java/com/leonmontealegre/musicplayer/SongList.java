@@ -8,7 +8,7 @@ public final class SongList {
 
     private static SongList instance = new SongList();
 
-    private ArrayList<Song> songs;
+    private final ArrayList<Song> songs;
 
     private SongList() {
         songs = new ArrayList<Song>();
@@ -35,7 +35,7 @@ public final class SongList {
     }
 
     public static ArrayList<Song> getSongs() {
-        return instance.songs;
+        return (ArrayList<Song>)instance.songs.clone();
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ControlBarFragment extends Fragment {
 
-    private ImageButton playPauseButton;
+    private ImageButton playPauseButton, fastForwardButton, backwardButton;
 
     private int playImage, pauseImage;
 
@@ -23,6 +23,8 @@ public class ControlBarFragment extends Fragment {
 
     private TextView currentTimeTextView, totalTimeTextView;
     private SeekBar durationBar;
+
+    private int currentTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,17 +51,47 @@ public class ControlBarFragment extends Fragment {
             }
         });
 
+        fastForwardButton = (ImageButton)rootView.findViewById(R.id.forwardButton);
+        fastForwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!MusicService.instance.isStopped) {
+                    Song s = MusicService.instance.getCurrentSong();
+                    MusicService.instance.stopMusic();
+                    if (s.index != SongList.getSongs().size()-1)
+                        SongList.play(s.index+1);
+                }
+            }
+        });
+
+        backwardButton = (ImageButton)rootView.findViewById(R.id.backwardButton);
+        backwardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!MusicService.instance.isStopped) {
+                    Song s = MusicService.instance.getCurrentSong();
+                    if (currentTime > 3000 || s.index == 0) { // more than 3 seconds through, restart song
+                        MusicService.instance.setCurrentPosition(0);
+                    } else { // else, go to previous song
+                        MusicService.instance.stopMusic();
+                        if (s.index != 0)
+                            SongList.play(s.index - 1);
+                    }
+                }
+            }
+        });
+
         currentTimeTextView = (TextView)rootView.findViewById(R.id.currentTime);
         totalTimeTextView = (TextView)rootView.findViewById(R.id.totalTime);
         durationBar = (SeekBar)rootView.findViewById(R.id.durationBar);
         durationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser && MusicService.instance.isPlaying)
+                if (fromUser && !MusicService.instance.isStopped)
                     MusicService.instance.setCurrentPosition(progress);
             }
             public void onStartTrackingTouch(SeekBar seekBar) {
-                if (!MusicService.instance.isPlaying)
+                if (!MusicService.instance.isStopped)
                     seekBar.setFocusable(false);
             }
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -80,12 +112,10 @@ public class ControlBarFragment extends Fragment {
                                 int seconds = (milliseconds / (1000)) % 60;
                                 int minutes = (milliseconds / (1000 * 60)) % 60;
                                 int hours = (milliseconds / (1000 * 60 * 60)) % 24;
+                                currentTime = milliseconds;
                                 currentTimeTextView.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
                                 durationBar.setProgress(milliseconds);
                             }
-                        } else {
-                            durationBar.setProgress(0);
-                            currentTimeTextView.setText(String.format("%02d:%02d:%02d", 0, 0, 0));
                         }
                     }
                 });
@@ -116,6 +146,7 @@ public class ControlBarFragment extends Fragment {
 
     public void onSongStop() {
         onSongPause();
+        totalTimeTextView.setText(String.format("%02d:%02d:%02d", 0, 0, 0));
         durationBar.setFocusable(false);
     }
 

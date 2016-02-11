@@ -12,8 +12,6 @@
         android:enabled="true"
         android:singleLine="true"
         android:textIsSelectable="true"
-        android:focusableInTouchMode="true"
-        android:descendantFocusability="blocksDescendants"
         android:textStyle="normal"
         android:clickable="true"
         android:inputType="text" />

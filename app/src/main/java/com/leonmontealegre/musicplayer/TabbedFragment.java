@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ public class TabbedFragment extends Fragment implements ViewPager.OnPageChangeLi
     private TabHost mTabHost;
     private View mRootView;
 
-    private  MusicListFragmentPagerAdapter pagerAdapter;
+    private MusicListFragmentPagerAdapter pagerAdapter;
 
     public MusicListFragment currentFragment;
 
@@ -37,6 +38,7 @@ public class TabbedFragment extends Fragment implements ViewPager.OnPageChangeLi
         listFragments.add(new SongListFragment());
 
         pagerAdapter = new MusicListFragmentPagerAdapter(getFragmentManager(), listFragments);
+        currentFragment = listFragments.get(0);
 
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOnPageChangeListener(this);
@@ -69,7 +71,6 @@ public class TabbedFragment extends Fragment implements ViewPager.OnPageChangeLi
         View tabView = mTabHost.getCurrentTabView();
         int scrollPos = tabView.getLeft() - (hScrollView.getWidth() - tabView.getWidth()) / 2;
         hScrollView.smoothScrollTo(scrollPos, 0);
-
     }
 
     @Override
