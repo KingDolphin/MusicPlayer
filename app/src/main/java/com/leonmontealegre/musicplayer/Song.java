@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-public class Song {
+public class Song implements Comparable <Song> {
 
     // To keep track of the amount of songs
     private static int COUNT = 0;
@@ -54,4 +54,8 @@ public class Song {
         MusicService.instance.setSong(this);
     }
 
+    @Override
+    public int compareTo(Song another) {
+        return this.artist.compareTo(another.artist);
+    }
 }
