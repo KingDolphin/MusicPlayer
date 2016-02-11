@@ -7,32 +7,21 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.LinearInterpolator;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import java.io.File;
 
@@ -120,7 +109,7 @@ public class MainActivity extends ActionBarActivity {
 
 
         final ImageView backgroundImage = (ImageView)findViewById(R.id.backgroundImage);
-        backgroundImage.setImageBitmap(blur(((BitmapDrawable)backgroundImage.getDrawable()).getBitmap())); // Blurs the background image
+        backgroundImage.setImageBitmap(blur(((BitmapDrawable) backgroundImage.getDrawable()).getBitmap())); // Blurs the background image
         animate(backgroundImage); // Animates the background
     }
 

@@ -2,7 +2,6 @@ package com.leonmontealegre.musicplayer;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 
 public class Song implements Comparable <Song> {
 
