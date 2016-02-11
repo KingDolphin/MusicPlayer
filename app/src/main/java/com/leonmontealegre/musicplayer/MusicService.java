@@ -111,6 +111,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
             isPlaying = true;
             isStopped = false;
             MainActivity.controlBar.onSongPlay(currentSong);
+            MainActivity.tabbedFragment.currentFragment.onSongStart(currentSong);
         }
     }
 
@@ -142,6 +143,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
             isPlaying = false;
             isStopped = true;
             MainActivity.controlBar.onSongStop();
+            MainActivity.tabbedFragment.currentFragment.onSongStop(currentSong);
         }
     }
 

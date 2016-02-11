@@ -40,6 +40,18 @@ public abstract class MusicListFragment extends ListFragment {
 
     protected abstract void onSearch(String keyword);
 
-    public abstract void onSongFinish(Song s);
+    public void onSongStart(Song s) {
+        getArrayAdapter().getView(s.index, null, getListView()).findViewById(R.id.is_playing_image).setVisibility(View.VISIBLE);
+    }
+
+    public void onSongStop(Song s) {
+        getArrayAdapter().getView(s.index, null, getListView()).findViewById(R.id.is_playing_image).setVisibility(View.INVISIBLE);
+    }
+
+    public void onSongFinish(Song s) {
+        //Plays next song if it's not the last song
+        if (s.index != SongList.getSongs().size()-1)
+            SongList.play(s.index+1);
+    }
 
 }

@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:id="@+id/fragmentSearchBar"
+            android:focusableInTouchMode="true"
             android:descendantFocusability="beforeDescendants"
             android:layout_gravity="top"
             android:layout_alignParentTop="true"
@@ -29,6 +30,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/fragmentContainer"
+            android:focusable="false"
+            android:descendantFocusability="afterDescendants"
+            android:selectAllOnFocus="false"
             android:layout_above="@+id/fragmentControlBar"
             android:layout_below="@+id/fragmentSearchBar" >
         </FrameLayout>

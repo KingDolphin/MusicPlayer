@@ -7,10 +7,15 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -53,9 +58,6 @@ public class MainActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_main);
 
-        final ImageView backgroundImage = (ImageView)findViewById(R.id.backgroundImage);
-        animate(backgroundImage);
-
         Context context = getApplicationContext();
 
         final Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -80,6 +82,8 @@ public class MainActivity extends ActionBarActivity {
             long albumId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
 
             int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+            if (duration == 0)
+                continue;
 
             Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
@@ -104,6 +108,12 @@ public class MainActivity extends ActionBarActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, tabbedFragment).commit();
 
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentSearchBar, new SearchBarFragment()).commit();
+
+
+
+        final ImageView backgroundImage = (ImageView)findViewById(R.id.backgroundImage);
+        backgroundImage.setImageBitmap(blur(((BitmapDrawable)backgroundImage.getDrawable()).getBitmap()));
+        animate(backgroundImage);
     }
 
     protected void animate(final ImageView backgroundImage) {
@@ -140,6 +150,21 @@ public class MainActivity extends ActionBarActivity {
         animator.setInterpolator(new LinearInterpolator());
         animator.setStartDelay(0);
         animator.start();
+    }
+
+    public Bitmap blur(Bitmap bitmap) {
+        Bitmap blurredMap = bitmap.copy(bitmap.getConfig(), true);
+
+        RenderScript rs = RenderScript.create(this);
+        final Allocation input = Allocation.createFromBitmap(rs, blurredMap);
+        final Allocation output = Allocation.createTyped(rs, input.getType());
+        final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        script.setRadius(5f);
+        script.setInput(input);
+        script.forEach(output);
+        output.copyTo(blurredMap);
+
+        return blurredMap;
     }
 
 }
