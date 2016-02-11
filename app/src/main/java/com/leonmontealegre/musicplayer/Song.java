@@ -6,6 +6,7 @@ import android.provider.MediaStore;
 
 public class Song {
 
+    // To keep track of the amount of songs
     private static int COUNT = 0;
 
     private String artist, album, title, dataPath;

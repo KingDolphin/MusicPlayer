@@ -32,6 +32,7 @@ public class TabbedFragment extends Fragment implements ViewPager.OnPageChangeLi
         mRootView = inflater.inflate(R.layout.fragment_tabbed, container, false);
         mViewPager = (ViewPager)mRootView.findViewById(R.id.view_pager);
 
+        // Adds fragments to list, only SongListFragments right now since we didn't have time for others
         List<MusicListFragment> listFragments = new ArrayList<MusicListFragment>();
         listFragments.add(new SongListFragment());
         listFragments.add(new SongListFragment());

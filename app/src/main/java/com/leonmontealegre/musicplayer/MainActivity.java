@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.renderscript.Allocation;
@@ -39,13 +40,20 @@ public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "MainActivity";
 
+    // The ControlBarFragment instance
     public static ControlBarFragment controlBar;
 
+    // The TabbedFragment instance
     public static TabbedFragment tabbedFragment;
 
-    protected float angle = -(float)Math.PI / 24;
+    // Angle to translate the image across
+    protected final float angle = -(float)Math.PI / 24;
 
+    // Matrix for translating the background image
     protected Matrix matrix = new Matrix();
+
+    // Stupid variable to stop a dumb bug with android where it waits a really long time to start
+    // the animation when it shouldn't
     protected float value = -1;
 
     @Override
@@ -71,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
         final String where = MediaStore.Audio.Media.IS_MUSIC + "=1";
         final Cursor cursor = context.getContentResolver().query(uri, cursor_cols, where, null, null);
 
-        while (cursor.moveToNext()) {
+        while (cursor.moveToNext()) { // Loads songs from files on the system
             String dataPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)); //is a path
             if (!new File(dataPath).exists())
                 continue;
@@ -89,7 +97,7 @@ public class MainActivity extends ActionBarActivity {
             Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
 
             Bitmap bitmap = null;
-            try {
+            try { // tries to load album art, since most songs don't have album art in them
                 bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), albumArtUri);
                 bitmap = Bitmap.createScaledBitmap(bitmap, 30, 30, true);
             } catch (Exception e) {
@@ -99,21 +107,21 @@ public class MainActivity extends ActionBarActivity {
             SongList.add(new Song(artist, bitmap, album, title, dataPath, albumId, duration, albumArtUri));
             Log.d(TAG, "SONG : " + title + " : " + duration);
         }
-        SongList.sort();
+        SongList.sort(); // Sorts all the songs in alphabetical order
 
-        controlBar = new ControlBarFragment();
+        controlBar = new ControlBarFragment(); // Loads the control bar with play/pause/fastforward/rewind
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentControlBar, controlBar).commit();
 
-        tabbedFragment = new TabbedFragment();
+        tabbedFragment = new TabbedFragment(); // Loads the fragment that has all the tabs
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, tabbedFragment).commit();
 
+        // Loads the search bar
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentSearchBar, new SearchBarFragment()).commit();
 
 
-
         final ImageView backgroundImage = (ImageView)findViewById(R.id.backgroundImage);
-        backgroundImage.setImageBitmap(blur(((BitmapDrawable)backgroundImage.getDrawable()).getBitmap()));
-        animate(backgroundImage);
+        backgroundImage.setImageBitmap(blur(((BitmapDrawable)backgroundImage.getDrawable()).getBitmap())); // Blurs the background image
+        animate(backgroundImage); // Animates the background
     }
 
     protected void animate(final ImageView backgroundImage) {
@@ -121,15 +129,16 @@ public class MainActivity extends ActionBarActivity {
 
         final float scaleFactor = (float) backgroundImage.getHeight() / (float) backgroundImage.getDrawable().getIntrinsicHeight() * 1.25f;
         matrix.postScale(scaleFactor, scaleFactor);
-        matrix.postTranslate(-value * (float)Math.cos(angle), value * (float)Math.sin(angle));
+        matrix.postTranslate(-value * (float) Math.cos(angle), value * (float) Math.sin(angle)); // Translates the matrix
         backgroundImage.setImageMatrix(matrix);
 
-        ValueAnimator animator;
+        ValueAnimator animator; // Creates an animator that goes from 0->100 or 100->0
         if (value == 0)
             animator = ValueAnimator.ofFloat(0, 100);
         else
             animator = ValueAnimator.ofFloat(value, 0);
 
+        // Updater that translates the image in the direction
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {

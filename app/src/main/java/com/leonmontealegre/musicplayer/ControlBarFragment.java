@@ -36,6 +36,7 @@ public class ControlBarFragment extends Fragment {
         pauseImage = android.R.drawable.ic_media_pause;
         playPauseButton.setImageResource(playImage);
 
+        // Changes the play button to a pause button
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +52,7 @@ public class ControlBarFragment extends Fragment {
             }
         });
 
+        // Skips to next song if not the last song
         fastForwardButton = (ImageButton)rootView.findViewById(R.id.forwardButton);
         fastForwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +66,7 @@ public class ControlBarFragment extends Fragment {
             }
         });
 
+        // Goes to beginning of song if past the 3 second mark, otherwise goes to previous song
         backwardButton = (ImageButton)rootView.findViewById(R.id.backwardButton);
         backwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +86,9 @@ public class ControlBarFragment extends Fragment {
 
         currentTimeTextView = (TextView)rootView.findViewById(R.id.currentTime);
         totalTimeTextView = (TextView)rootView.findViewById(R.id.totalTime);
+
         durationBar = (SeekBar)rootView.findViewById(R.id.durationBar);
+        // Sets the current time of the song to the value of the slider bar
         durationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -99,6 +104,7 @@ public class ControlBarFragment extends Fragment {
             }
         });
 
+        // Updates the 'currentTime' text every second to be the correct time of the song
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -126,11 +132,13 @@ public class ControlBarFragment extends Fragment {
     }
 
     public void onSongPlay(Song song) {
-        playPauseButton.setImageResource(pauseImage);
+        playPauseButton.setImageResource(pauseImage); // Sets play button to pause button
         isPaused = false;
 
+        // Lets user drag the bar to change song time
         durationBar.setFocusable(true);
 
+        // Sets total time text to the duration of the song
         int milliseconds = MusicService.instance.getCurrentSong().getDuration();
         int seconds = (milliseconds / (1000)) % 60;
         int minutes = (milliseconds / (1000*60)) % 60;
@@ -140,13 +148,13 @@ public class ControlBarFragment extends Fragment {
     }
 
     public void onSongPause() {
-        playPauseButton.setImageResource(playImage);
+        playPauseButton.setImageResource(playImage); // Sets pause button to play button
         isPaused = true;
     }
 
     public void onSongStop() {
         onSongPause();
-        totalTimeTextView.setText(String.format("%02d:%02d:%02d", 0, 0, 0));
+        totalTimeTextView.setText(String.format("%02d:%02d:%02d", 0, 0, 0)); // Sets total time to 00:00:00
         durationBar.setFocusable(false);
     }
 
